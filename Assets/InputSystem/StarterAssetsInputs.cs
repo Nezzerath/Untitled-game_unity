@@ -12,6 +12,7 @@ namespace StarterAssets
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
+		public bool openMenu;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -28,16 +29,17 @@ namespace StarterAssets
 			MoveInput(value.Get<Vector2>());
 		}
 
-		public void OpenMenu(InputValue value) 
-		{ 
-			MenuState(value.Get<bool>());
-		}
 
-		public void MenuState(bool state) 
-		{
-			IsMenuOpen = state;
-		}
+        public void OpenMenu(InputValue value)
+        {
+            MenuInput(value.isPressed);
+        }
 
+        public void MenuInput(bool newMenuState)
+        {
+            IsMenuOpen = newMenuState;
+        }
+        
 		public void OnLook(InputValue value)
 		{
 			if(cursorInputForLook)

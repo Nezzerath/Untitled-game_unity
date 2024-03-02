@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
@@ -78,8 +79,9 @@ namespace StarterAssets
 
         public Canvas canvas;
 
-        public GameObject hudPrefab;
+        public GameObject menu;
 
+        public InputActionReference actions;
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -113,6 +115,8 @@ namespace StarterAssets
 
         private const float _threshold = 0.01f;
 
+        
+
         private bool _hasAnimator;
 
         private bool IsCurrentDeviceMouse
@@ -127,14 +131,16 @@ namespace StarterAssets
             }
         }
 
-
+        
         private void Awake()
         {
+            
             // get a reference to our main camera
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
+
         }
 
         private void Start()
@@ -145,6 +151,7 @@ namespace StarterAssets
             _controller = GetComponent<CharacterController>();
             canvas = GetComponent<Canvas>();
             _input = GetComponent<StarterAssetsInputs>();
+            
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
             _playerInput = GetComponent<PlayerInput>();
 #else
@@ -156,6 +163,7 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+            actions.action.performed += OpenMenu;
         }
 
         private void Update()
@@ -165,23 +173,29 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
-            OpenMenu();
+            
         }
 
-        private void OpenMenu()
+        private void OpenMenu(InputAction.CallbackContext context)
         {
-            if (_input.IsMenuOpen) 
+            
+            
+            if (_input.IsMenuOpen)
             {
-                var Canvas = GetComponent<Canvas>();
-                Canvas.gameObject.SetActive(false);
+
+                menu.SetActive(false);
                 _input.IsMenuOpen = false;
             }
             else
             {
-                var Canvas = GetComponent<Canvas>();
-                Canvas.gameObject.SetActive(true);
+
+                menu.SetActive(true);
                 _input.IsMenuOpen = true;
             }
+
+            
+            
+            
         }
 
         private void LateUpdate()
