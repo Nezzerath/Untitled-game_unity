@@ -73,12 +73,18 @@ public class playermovementinput : MonoBehaviour
 
             menu.SetActive(false);
             IsMenuOpen = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            
         }
         else
         {
 
             menu.SetActive(true);
             IsMenuOpen = true;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
         }
 
 
@@ -101,7 +107,7 @@ public class playermovementinput : MonoBehaviour
     private void CameraRotation()
     {
         // if there is an input and camera position is not fixed
-        if (_input.Movement.Look.ReadValue<Vector2>().sqrMagnitude >= _threshold)
+        if (_input.Movement.Look.ReadValue<Vector2>().sqrMagnitude >= _threshold && !IsMenuOpen)
         {
             //Don't multiply mouse input by Time.deltaTime;
             float deltaTimeMultiplier = 1.0f;
@@ -121,7 +127,7 @@ public class playermovementinput : MonoBehaviour
 
     private void PlayerDirection()
     {
-       if (_input.Movement.Move.ReadValue<Vector2>() != new Vector2(0, 0))
+       if (_input.Movement.Move.ReadValue<Vector2>() != new Vector2(0, 0) && !IsMenuOpen)
        {
            transform.eulerAngles = new Vector3(transform.eulerAngles.x, CinemachineCameraTarget.transform.eulerAngles.y, transform.eulerAngles.z);
        }
