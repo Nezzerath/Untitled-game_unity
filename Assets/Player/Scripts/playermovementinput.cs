@@ -35,6 +35,7 @@ public class playermovementinput : MonoBehaviour
     private void Awake()
     {
         anim = GetComponent<Animator>();
+        menu.SetActive(false);
     }
     // Start is called before the first frame update
     void Start()
