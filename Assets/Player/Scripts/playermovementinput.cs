@@ -46,6 +46,8 @@ public class playermovementinput : MonoBehaviour
         _input.Movement.Move.performed += HandleMovement;
         _input.Movement.Move.canceled += HandleStop;
         _input.Movement.OpenMenu.performed += OpenMenu;
+        _input.Movement.Jump.performed += OnJump;
+        _input.Movement.Jump.canceled += OnJumpEnd;
 
         _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
 
@@ -55,9 +57,23 @@ public class playermovementinput : MonoBehaviour
 
     }
 
+    private void OnJumpEnd(InputAction.CallbackContext context)
+    {
+        anim.SetBool("Jump", false);
+    }
+
+    private void OnJump(InputAction.CallbackContext context)
+    {
+        anim.SetBool("Jump", true);
+    }
+
     void HandleMovement(InputAction.CallbackContext context)
     {
         anim.SetBool("IsWalking", true);
+        var x_input = _input.Movement.Move.ReadValue<Vector2>().x;
+        var y_input = _input.Movement.Move.ReadValue<Vector2>().y;
+        anim.SetFloat("x_Movement", x_input);
+        anim.SetFloat("y_Movement", y_input);
     }
 
     void HandleStop(InputAction.CallbackContext context)

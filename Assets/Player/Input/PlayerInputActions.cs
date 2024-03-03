@@ -62,6 +62,15 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""90be1c27-9bc2-4b7a-babf-0fcdcb390498"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +161,17 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da6f945a-01f6-4e5c-b272-80b2d0656c99"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -164,6 +184,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         m_Movement_Run = m_Movement.FindAction("Run", throwIfNotFound: true);
         m_Movement_OpenMenu = m_Movement.FindAction("OpenMenu", throwIfNotFound: true);
         m_Movement_Look = m_Movement.FindAction("Look", throwIfNotFound: true);
+        m_Movement_Jump = m_Movement.FindAction("Jump", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -227,6 +248,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_Run;
     private readonly InputAction m_Movement_OpenMenu;
     private readonly InputAction m_Movement_Look;
+    private readonly InputAction m_Movement_Jump;
     public struct MovementActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -235,6 +257,7 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         public InputAction @Run => m_Wrapper.m_Movement_Run;
         public InputAction @OpenMenu => m_Wrapper.m_Movement_OpenMenu;
         public InputAction @Look => m_Wrapper.m_Movement_Look;
+        public InputAction @Jump => m_Wrapper.m_Movement_Jump;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -256,6 +279,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Look.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnLook;
                 @Look.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnLook;
                 @Look.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnLook;
+                @Jump.started -= m_Wrapper.m_MovementActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_MovementActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_MovementActionsCallbackInterface.OnJump;
             }
             m_Wrapper.m_MovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -272,6 +298,9 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
             }
         }
     }
@@ -282,5 +311,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
         void OnRun(InputAction.CallbackContext context);
         void OnOpenMenu(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
     }
 }
