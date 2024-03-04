@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a70e525c82ce9413fa4d940ad7fcf1db
+labels:
+- InverseKinematics
+- IK
+- FullBodyIK
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 9999
+  icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
