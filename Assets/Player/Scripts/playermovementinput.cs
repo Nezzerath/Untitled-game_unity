@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.Windows;
 
 public class playermovementinput : MonoBehaviour
 {
+    #region Camera rotate Variables
     [Tooltip("How far in degrees can you move the camera up")]
     public float TopClamp = 70.0f;
 
@@ -18,24 +20,52 @@ public class playermovementinput : MonoBehaviour
     public float CameraAngleOverride = 0.0f;
 
     private const float _threshold = 0.01f;
+    #endregion
 
-    private bool IsMenuOpen;
-  
+    
 
 
+    #region Animation and cinemachine Camera Variables
     public Animator anim;
     private float _cinemachineTargetYaw;
     private float _cinemachineTargetPitch;
     public GameObject CinemachineCameraTarget;
     public PlayerInputActions _input;
+    #endregion
+
+
+
+    #region Menu Bool Variables
     public GameObject menu;
+    private bool IsMenuOpen;
+    #endregion
+
+
+    #region Character Stats
+    // Health
+    public float currentHealth = 60;
+    public float maxHealth = 100;
+    // Stamina
+    public float currentStamina = 60;
+    public float maxStamina = 100;
+
+
+    #endregion
+
+
+    [SerializeField] private GameObject hudPrefab;
+    [SerializeField] private GameObject hudObject;
+    [SerializeField] private HUDController hudScript;
 
 
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        menu.SetActive(false);
+        hudObject = Instantiate(hudPrefab, this.gameObject.transform);
+        hudScript = hudObject.GetComponent<HUDController>();
+        hudScript.menu.SetActive(false);
+
     }
     // Start is called before the first frame update
     void Start()
@@ -85,10 +115,10 @@ public class playermovementinput : MonoBehaviour
     {
 
 
-        if (IsMenuOpen)
+        if (hudScript.menu.activeInHierarchy)
         {
 
-            menu.SetActive(false);
+            hudScript.menu.SetActive(false);
             IsMenuOpen = false;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -97,7 +127,7 @@ public class playermovementinput : MonoBehaviour
         else
         {
 
-            menu.SetActive(true);
+            hudScript.menu.SetActive(true);
             IsMenuOpen = true;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -113,6 +143,7 @@ public class playermovementinput : MonoBehaviour
     void Update()
     {
         PlayerDirection();
+        
     }
     private void LateUpdate()
     {
@@ -156,4 +187,6 @@ public class playermovementinput : MonoBehaviour
         if (lfAngle > 360f) lfAngle -= 360f;
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
+
+ 
 }

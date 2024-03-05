@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,19 +8,38 @@ using UnityEngine.UI;
 
 public class HUDController : MonoBehaviour
 {
-    public Button Character;
-    public Button Social;
-    public Button Map;
-    public Button Settings;
-    public Button Messages;
-    public GameObject tooltip;
-    public GameObject menu;
+    #region Button Variable Setup
+    // Button Variable Setup
+    [SerializeField] private Button Character;
+    [SerializeField] private Button Social;
+    [SerializeField] private Button Map;
+    [SerializeField] private Button Settings;
+    [SerializeField] private Button Messages;
+    #endregion
+
+
+    #region Menu Variable Setup
+    // Menu variable Setup
+    [SerializeField] private GameObject tooltip;
+    [SerializeField] public GameObject menu;
     [SerializeField] private bool subMenuOpen;
-    // Start is called before the first frame update
+    #endregion
+
+    [SerializeField] private playermovementinput playerInput;
+
+
+    [SerializeField] public Slider healthBar;
+    [SerializeField] public Slider StaminaBar;
+    [SerializeField] public AnimationCurve fillCurve;
+
     void Start()
     {
         tooltip.SetActive(false);
         subMenuOpen = false;
+        playerInput = GetComponentInParent<playermovementinput>();
+        
+
+
     }
 
     // Update is called once per frame
@@ -30,6 +50,11 @@ public class HUDController : MonoBehaviour
             tooltip.SetActive (false);
             //subMenuOpen = false;
         }
+
+        HandleHealth();
+        HandleStamina();
+
+        
     }
 
     public void Hover(Button button)
@@ -73,6 +98,24 @@ public class HUDController : MonoBehaviour
     {
         tooltip.SetActive(false);
         subMenuOpen = true;
+    }
+
+    public void HandleHealth()
+    {
+        
+        var sliderValue = EvaluateCurve(fillCurve, playerInput.currentHealth / playerInput.maxHealth);
+        healthBar.value = sliderValue;
+    }
+
+    private float EvaluateCurve(AnimationCurve curve, float position)
+    {
+        return curve.Evaluate(position);
+    }
+
+    public void HandleStamina()
+    {
+        var sliderValue = playerInput.currentStamina / playerInput.maxStamina;
+        StaminaBar.value = Convert.ToSingle(sliderValue);
     }
 
 
